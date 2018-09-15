@@ -10,7 +10,7 @@ RUN apt-get install -y \
     python-pip \
     python3-dev \
      build-essential
- 
+
 COPY . /app
 WORKDIR /app
 

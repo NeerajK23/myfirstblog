@@ -1,5 +1,6 @@
 import os
-import secrets
+#import secrets
+import random
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
 from flaskblog import app, db, bcrypt
@@ -81,9 +82,10 @@ def logout():
     return redirect(url_for('home'))
 
 def save_picture(form_picture):
-    random_hex = secrets.token_hex(8)
-    _, f_ext=os.path.splittext(form_picture.filename)
-    picture_fn = random_hex + f_ext
+    #random_hex = secrets.token_hex(8)
+    random_hex = random.randint(100000000000,999999999999)
+    _, f_ext=os.path.splitext(form_picture.filename)
+    picture_fn = str(random_hex) + f_ext
     picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn) 
     output_size =(125,125)
     i = Image.open(form_picture)

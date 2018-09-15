@@ -1,3 +1,6 @@
+import os
+import secrets
+from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
 from flaskblog import app, db, bcrypt
 from flaskblog.forms import RegistrationForm,LoginForm,UpdateAccountForm
@@ -8,12 +11,13 @@ posts=[
     {
 
          'author':'Neeraj Kuamr',
+         'title': 'Ye Un Dino Ki Baat Hai.',
+         'content':'tennu khuda manneya \
+                    te tennu rab manneya \
+                    koi nahi bhulda yaara \
+                    jivein tu hai bhuleya',
 
-         'title': 'Shaktimaan Return',
-
-         'content':'Pyar is Incomplete without I',
-
-         'date_posted':'August 6, 2012'
+         'date_posted':'September 16, 2018'
 
     },
 
@@ -76,11 +80,25 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext=os.path.splittext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn) 
+    output_size =(125,125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+    return picture_fn
+
 @app.route("/account", methods=['GET','POST'])
 @login_required
 def account():
     form=UpdateAccountForm()
     if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.image_file = picture_file
         current_user.username=form.username.data
         current_user.email=form.email.data
         db.session.commit()

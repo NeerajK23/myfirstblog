@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
 
-MAINTAINER Neeraj Kumar "Smartneeraj.j23.com"
+MAINTAINER Neeraj Kumar
 EXPOSE 5000
 RUN apt-get update -y
 RUN apt-get install -y \

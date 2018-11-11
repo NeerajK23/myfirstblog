@@ -20,6 +20,7 @@ RUN pip install flask-sqlalchemy
 RUN pip install flask-bcrypt
 RUN pip install flask-login
 RUN pip install Pillow
+RUN pip install flask-mail
 ENTRYPOINT ["python"]
 
 CMD ["run.py"]

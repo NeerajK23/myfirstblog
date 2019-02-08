@@ -1,9 +1,37 @@
 {% extends "layout.html" %}
-
 {% block content %}
 
-<h1>About Page/</h1>
+<head>
+<style>
+img {
+    float: left;
+}
+</style>
+</head>
+<body>
+<p><img src="{{ url_for('static', filename='profile_pics/adminprofile.jpg') }}" style="width:200px;height:200px;margin-right:15px;">
+<h2>Neeraj Kumar</h2>
+<small>Senior Infra Developer | Python | Machine Learning</small>
 
-<h6>Shaktimaan</h6>
+<h6><a href="https://www.linkedin.com/in/neeraj-kumar-2696b8a8/">LinkedIn</a> |
+<a href="https://www.facebook.com/profile.php?id=100002197557789">Facebook</a></h6>
+</p>
+
+<p>Email : <u>NeerajKumarJ93@gmail.com</u> </p>
+
+</body>
+</br>
+</br>
+</br>
+</br>
+
+<div class="media-body">
+  <div class="article-metadata">
+    <h5 class="mr-2">Welcome To This blog</h5>
+<br>
+<p> Express your views, ideas, thoughts or anything you want to share. Share to everyone.</p>
+<h6>Enjoy Writing, Enjoy Sharing :)
+  </div>
+</div>
 
 {% endblock content %}

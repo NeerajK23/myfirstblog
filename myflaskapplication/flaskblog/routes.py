@@ -28,7 +28,7 @@ def register():
     form= RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        user = User(username=form.username.data, email=(form.email.data).lower(), password=hashed_password)
         db.session.add(user)
         db.session.commit()
         flash('Your Account has been created! You are now able to Log in', 'success')
@@ -42,7 +42,7 @@ def login():
     form= LoginForm()
 
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(email=(form.email.data).lower()).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
@@ -63,7 +63,7 @@ def save_picture(form_picture):
     _, f_ext=os.path.splitext(form_picture.filename)
     picture_fn = str(random_hex) + f_ext
     picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn) 
-    output_size =(125,125)
+    output_size =(200,200)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
     i.save(picture_path)
@@ -78,7 +78,7 @@ def account():
             picture_file = save_picture(form.picture.data)
             current_user.image_file = picture_file
         current_user.username=form.username.data
-        current_user.email=form.email.data
+        current_user.email=(form.email.data).lower()
         db.session.commit()
         flash('Your Account has been Updated!', 'success')
         return redirect(url_for('account'))
@@ -87,6 +87,13 @@ def account():
         form.email.data=current_user.email
     image_file= url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html',title='Account', image_file=image_file, form=form)
+
+@app.route("/userlist")
+@login_required
+def userlist():
+    users=User.query.order_by(User.username).all()
+    #users=User.query.all()
+    return render_template('userlist.html',users=users)
 
 @app.route("/post/new",methods=['GET','POST'])
 @login_required
@@ -153,7 +160,7 @@ def reset_request():
         return redirect(url_for('home'))
     form = RequestResetForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(email=(form.email.data).lower()).first()
         send_reset_email(user)
         flash('An email has been sent with instructions to reset your password.','info')
         return redirect(url_for('login'))
